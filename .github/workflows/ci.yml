@@ -1,0 +1,20 @@
+﻿name: Mortgage Calculator CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  python-checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - run: pip install -r requirements.txt
+    - run: black --check --diff .
+    - run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    - run: pytest tests/ -v
